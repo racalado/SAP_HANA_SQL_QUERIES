@@ -1,0 +1,14 @@
+SELECT UTD,
+COUNT (*) AS CONTADOR
+
+FROM
+
+(select * from  ( SELECT * FROM "CLP123432"."ENERGIA_TOTAL" WHERE "Energia_irr" IS NOT NULL) e
+INNER join (SELECT DISTINCT "ZCGINSTAL", "UTD", "ZCGNOMCLI", "GRUPO_CPSP"  FROM "CLP123432"."PLANILHAO_CLIENTE" WHERE ("GRUPO_CPSP" = 'GRUPO_A') AND "ZCGSITUCC" = 'LIGADO') c
+on e.anlage = C.zcginstal
+
+WHERE "Energia_irr" > 0
+order by "UTD", "Energia_irr" desc
+)
+GROUP BY UTD
+order by "UTD"

@@ -1,0 +1,12 @@
+SELECT * FROM (SELECT *,
+            row_number() OVER (partition by ZCGINSTAL Order by ZCGDTENCE DESC) As row_number 
+            
+            FROM (select ZCGINSTAL, ZCGQMNUM ,ZCGUSRSTS, ZCGSYSSTS,ZCGDTENCE from "CLB_CCS_ICC"."ZCT_DS_TAB004"
+            
+             WHERE ZCGINSTAL IN ('0006419352','0006622889')
+
+AND ZCGTPNOTA = 'CL')
+
+            
+          
+          )  WHERE row_number = 1
