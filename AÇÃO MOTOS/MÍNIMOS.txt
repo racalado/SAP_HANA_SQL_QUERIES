@@ -1,0 +1,41 @@
+SELECT *,
+ROW_NUMBER() OVER (ORDER BY MEDIA DESC) AS RANK
+FROM
+(SELECT TOP 5000 "ZCGUNLEIT", COUNT(*) AS "INSTALACAO_COUNT", SUM("KWH") AS "ENERGIA_DEF_SUM",
+SUM("KWH")/COUNT(*) AS MEDIA
+FROM
+(
+SELECT c.ZCGINSTAL , DT_ULT_FAT, c."MES-01", c."MES-02", c."MES-03", o."MES-01", o."MES-02", o."MES-03",
+cli.zcgsitucc , cli.utd, cli.municipio, cli.localidade, cli.zcgbairr , zcglatitu , zcglongit, zcgendcom, zcgposto, zcgunleit, CASE WHEN E."Energia_def" > 0 THEN E."Energia_def" ELSE 0 END KWH --, F.*--, M.*
+  FROM "CLP123432"."PLANILHAO_CONSUMO" c
+left join "CLP123432"."PLANILHAO_OCLE" o
+on c.ZCGINSTAL = o.ZCGINSTAL
+left join (select * from "CLP123432"."PLANILHAO_CLIENTE" where zcgsitucc <> 'BAIXADO' and equip_smc = 0
+and eq_valdesde<'2017-12-31') cli
+  on cli.ZCGINSTAL = o.ZCGINSTAL
+  LEFT JOIN "CLP124051"."ENERGIA_TOTAL" E
+  ON E.ANLAGE = c.ZCGINSTAL
+  LEFT JOIN "CLP124051"."MOTOPROP" M
+  ON M.INSTALACAO = C.ZCGINSTAL
+ 
+WHERE c."MES-01" IN (30,100) and setor LIKE 'METROPOLITANO'
+)
+GROUP BY "ZCGUNLEIT"
+ORDER BY "ENERGIA_DEF_SUM" DESC)
+
+;
+
+SELECT c.ZCGINSTAL , DT_ULT_FAT, c."MES-01", c."MES-02", c."MES-03", o."MES-01", o."MES-02", o."MES-03",
+cli.zcgsitucc , cli.utd, cli.municipio, cli.localidade, cli.zcgbairr , zcglatitu , zcglongit, zcgendcom, zcgposto, zcgunleit, CASE WHEN E."Energia_def" > 0 THEN E."Energia_def" ELSE 0 END KWH --, F.*--, M.*
+  FROM "CLP123432"."PLANILHAO_CONSUMO" c
+left join "CLP123432"."PLANILHAO_OCLE" o
+on c.ZCGINSTAL = o.ZCGINSTAL
+left join (select * from "CLP123432"."PLANILHAO_CLIENTE" where zcgsitucc <> 'BAIXADO' and equip_smc = 0
+and eq_valdesde<'2017-12-31') cli
+  on cli.ZCGINSTAL = o.ZCGINSTAL
+  LEFT JOIN "CLP124051"."ENERGIA_TOTAL" E
+  ON E.ANLAGE = c.ZCGINSTAL
+  LEFT JOIN "CLP124051"."MOTOPROP" M
+  ON M.INSTALACAO = C.ZCGINSTAL
+ 
+WHERE c."MES-01" IN (30,100) and setor LIKE 'METROPOLITANO'

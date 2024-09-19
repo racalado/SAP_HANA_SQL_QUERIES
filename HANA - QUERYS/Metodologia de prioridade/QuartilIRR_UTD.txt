@@ -1,0 +1,5 @@
+select * from  ( SELECT * FROM "CLP123432"."ENERGIA_TOTAL" WHERE "Energia_irr" IS NOT NULL) e
+inner join (SELECT "ZCGINSTAL", "UTD", "GRUPO_CPSP"  FROM "CLP123432"."PLANILHAO_CLIENTE" WHERE ("GRUPO_CPSP" = 'GRUPO_A')) c
+on e.anlage = C.zcginstal
+
+order by "UTD", "Energia_irr" desc
